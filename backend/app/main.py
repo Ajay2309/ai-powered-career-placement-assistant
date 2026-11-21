@@ -1,4 +1,8 @@
 
+from app.database import Base, engine
+from app import models
+models.Base.metadata.create_all(bind=engine)
+
 from fastapi import FastAPI, HTTPException
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
