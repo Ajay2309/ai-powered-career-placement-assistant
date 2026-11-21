@@ -4,9 +4,10 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from app.database import Base, engine, get_db
 from app import models, schemas
-from app.security import hash_password
+from app.auth import create_access_token
+from app.database import Base, engine, get_db
+from app.security import hash_password, verify_password
 
 
 # Create database tables if they do not exist.
@@ -97,3 +98,39 @@ def register_student(
         )
 
     return new_student
+
+@app.post(
+    "/login",
+    response_model=schemas.TokenResponse,
+)
+def login_student(
+    student: schemas.StudentLogin,
+    db: Session = Depends(get_db),
+):
+    # Find the student using their email.
+    existing_student = (
+        db.query(models.Student)
+        .filter(models.Student.email == student.email)
+        .first()
+    )
+
+    # Verify the password.
+    if not existing_student or not verify_password(
+        student.password,
+        existing_student.password_hash,
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid email or password.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    # Generate a JWT access token.
+    access_token = create_access_token(
+        data={"sub": str(existing_student.id)}
+    )
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+    }

@@ -18,3 +18,13 @@ class StudentResponse(BaseModel):
     graduation_year: int | None
 
     model_config = {"from_attributes": True}
+
+
+class StudentLogin(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=1, max_length=128)
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
