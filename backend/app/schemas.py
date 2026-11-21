@@ -1,4 +1,5 @@
 
+from datetime import datetime
 from pydantic import BaseModel, EmailStr, Field
 
 
@@ -44,3 +45,11 @@ class StudentUpdate(BaseModel):
         ge=2020,
         le=2100,
     )
+
+class StudentDashboardResponse(BaseModel):
+    id: int
+    full_name: str
+    email: EmailStr
+    branch: str | None
+    graduation_year: int | None
+    created_at: datetime

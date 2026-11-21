@@ -163,3 +163,12 @@ def update_student_profile(
     db.refresh(current_student)
 
     return current_student
+
+@app.get(
+    "/dashboard",
+    response_model=schemas.StudentDashboardResponse,
+)
+def get_student_dashboard(
+    current_student: models.Student = Depends(get_current_student),
+):
+    return current_student
