@@ -1,4 +1,5 @@
 
+from app.dependencies import get_current_student
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
@@ -134,3 +135,12 @@ def login_student(
         "access_token": access_token,
         "token_type": "bearer",
     }
+
+@app.get(
+    "/profile",
+    response_model=schemas.StudentResponse,
+)
+def get_student_profile(
+    current_student: models.Student = Depends(get_current_student),
+):
+    return current_student
