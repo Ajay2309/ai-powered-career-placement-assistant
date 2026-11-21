@@ -144,3 +144,22 @@ def get_student_profile(
     current_student: models.Student = Depends(get_current_student),
 ):
     return current_student
+
+@app.put(
+    "/profile",
+    response_model=schemas.StudentResponse,
+)
+def update_student_profile(
+    student_update: schemas.StudentUpdate,
+    current_student: models.Student = Depends(get_current_student),
+    db: Session = Depends(get_db),
+):
+    update_data = student_update.model_dump(exclude_unset=True)
+
+    for field, value in update_data.items():
+        setattr(current_student, field, value)
+
+    db.commit()
+    db.refresh(current_student)
+
+    return current_student

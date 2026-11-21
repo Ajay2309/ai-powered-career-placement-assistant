@@ -28,3 +28,19 @@ class StudentLogin(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+class StudentUpdate(BaseModel):
+    full_name: str | None = Field(
+        default=None,
+        min_length=2,
+        max_length=100,
+    )
+    branch: str | None = Field(
+        default=None,
+        max_length=50,
+    )
+    graduation_year: int | None = Field(
+        default=None,
+        ge=2020,
+        le=2100,
+    )
