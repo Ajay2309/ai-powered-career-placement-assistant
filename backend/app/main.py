@@ -1,6 +1,3 @@
-
-from app.resume import router as resume_router
-from app.dependencies import get_current_student
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
@@ -10,7 +7,11 @@ from app import models, schemas
 from app.auth import create_access_token
 from app.database import Base, engine, get_db
 from app.security import hash_password, verify_password
+from app.dependencies import get_current_student
+from app.resume import router as resume_router
+from app.jobs import router as jobs_router
 
+Base.metadata.create_all(bind=engine)
 
 # Create database tables if they do not exist.
 Base.metadata.create_all(bind=engine)
@@ -22,6 +23,7 @@ app = FastAPI(
     version="1.0.0",
 )
 app.include_router(resume_router)
+app.include_router(jobs_router)
 
 
 @app.get("/")

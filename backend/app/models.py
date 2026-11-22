@@ -1,7 +1,7 @@
 
 from datetime import datetime
 
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Text
 from app.database import Base
 
 
@@ -25,3 +25,16 @@ class Resume(Base):
     file_path = Column(String(500), nullable=False)
     extracted_text = Column(Text, nullable=True)
     uploaded_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+class Job(Base):
+    __tablename__ = "jobs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(150), nullable=False)
+    company = Column(String(150), nullable=False)
+    location = Column(String(150), nullable=True)
+    description = Column(Text, nullable=False)
+    required_skills = Column(Text, nullable=False)
+    employment_type = Column(String(50), nullable=True)
+    is_active = Column(Boolean, default=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)

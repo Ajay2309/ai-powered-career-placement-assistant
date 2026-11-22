@@ -61,3 +61,23 @@ class ResumeAnalysisResponse(BaseModel):
     total_skills: int
     word_count: int
     suggestions: list[str]
+
+class JobCreate(BaseModel):
+    title: str = Field(min_length=2, max_length=150)
+    company: str = Field(min_length=2, max_length=150)
+    location: str | None = Field(default=None, max_length=150)
+    description: str = Field(min_length=10)
+    required_skills: list[str] = Field(min_length=1)
+    employment_type: str | None = Field(default=None, max_length=50)
+
+
+class JobResponse(BaseModel):
+    id: int
+    title: str
+    company: str
+    location: str | None
+    description: str
+    required_skills: list[str]
+    employment_type: str | None
+    is_active: bool
+    created_at: datetime
