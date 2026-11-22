@@ -53,3 +53,11 @@ class StudentDashboardResponse(BaseModel):
     branch: str | None
     graduation_year: int | None
     created_at: datetime
+
+class ResumeAnalysisResponse(BaseModel):
+    resume_id: int
+    file_name: str
+    skills: list[str]
+    total_skills: int
+    word_count: int
+    suggestions: list[str]

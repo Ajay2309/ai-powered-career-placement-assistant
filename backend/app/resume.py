@@ -1,3 +1,6 @@
+
+from app import schemas
+from app.analysis import analyze_resume_text
 import os
 import uuid
 
@@ -93,3 +96,35 @@ async def upload_resume(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Resume upload failed. Please try again.",
         )
+
+@router.get(
+    "/{resume_id}/analysis",
+    response_model=schemas.ResumeAnalysisResponse,
+)
+def analyze_uploaded_resume(
+    resume_id: int,
+    current_student: models.Student = Depends(get_current_student),
+    db: Session = Depends(get_db),
+):
+    resume = (
+        db.query(models.Resume)
+        .filter(
+            models.Resume.id == resume_id,
+            models.Resume.student_id == current_student.id,
+        )
+        .first()
+    )
+
+    if resume is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Resume not found.",
+        )
+
+    analysis = analyze_resume_text(resume.extracted_text or "")
+
+    return {
+        "resume_id": resume.id,
+        "file_name": resume.file_name,
+        **analysis,
+    }
