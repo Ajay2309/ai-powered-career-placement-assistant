@@ -1,4 +1,5 @@
 
+from app.resume import router as resume_router
 from app.dependencies import get_current_student
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy import text
@@ -20,6 +21,7 @@ app = FastAPI(
     description="An AI-powered platform for career guidance and placement preparation.",
     version="1.0.0",
 )
+app.include_router(resume_router)
 
 
 @app.get("/")
