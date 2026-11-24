@@ -8,10 +8,10 @@ function Dashboard() {
       path: "/resume",
     },
     {
-      title: "Job Recommendations",
-      description:
-        "Discover jobs matching your skills and qualifications.",
-    },
+  title: "Job Recommendations",
+  description: "Discover jobs matching your skills and qualifications.",
+  path: "/jobs"
+  },
     {
       title: "Skill Gap Analysis",
       description:
