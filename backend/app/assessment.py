@@ -200,6 +200,7 @@ def get_questions(
     return questions
 
 
+
 @router.post(
     "/submit",
     response_model=schemas.AssessmentResponse,
@@ -207,6 +208,7 @@ def get_questions(
 def submit_assessment(
     submission: schemas.AssessmentSubmit,
     current_student: models.Student = Depends(get_current_student),
+    db: Session = Depends(get_db),
 ):
     # Prevent duplicate question submissions.
     question_ids = [
@@ -243,4 +245,41 @@ def submit_assessment(
         ]
     )
 
+    # Save the assessment result in PostgreSQL.
+    assessment_attempt = models.AssessmentAttempt(
+        student_id=current_student.id,
+        total_questions=result["total_questions"],
+        correct_answers=result["correct_answers"],
+        incorrect_answers=result["incorrect_answers"],
+        score_percentage=result["score_percentage"],
+        topic_performance=result["topic_performance"],
+        results=result["results"],
+    )
+
+    db.add(assessment_attempt)
+    db.commit()
+    db.refresh(assessment_attempt)
+
+    # Return the assessment result.
     return result
+
+@router.get(
+    "/history",
+    response_model=list[schemas.AssessmentHistoryResponse],
+)
+def get_assessment_history(
+    current_student: models.Student = Depends(get_current_student),
+    db: Session = Depends(get_db),
+):
+    attempts = (
+        db.query(models.AssessmentAttempt)
+        .filter(
+            models.AssessmentAttempt.student_id == current_student.id
+        )
+        .order_by(
+            models.AssessmentAttempt.created_at.desc()
+        )
+        .all()
+    )
+
+    return attempts

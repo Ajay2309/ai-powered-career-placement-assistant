@@ -1,7 +1,7 @@
 
 from datetime import datetime
 
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Text, JSON
 from app.database import Base
 
 
@@ -38,3 +38,28 @@ class Job(Base):
     employment_type = Column(String(50), nullable=True)
     is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+class AssessmentAttempt(Base):
+    __tablename__ = "assessment_attempts"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    student_id = Column(
+        Integer,
+        ForeignKey("students.id"),
+        nullable=False
+    )
+
+    total_questions = Column(Integer, nullable=False)
+    correct_answers = Column(Integer, nullable=False)
+    incorrect_answers = Column(Integer, nullable=False)
+    score_percentage = Column(Integer, nullable=False)
+
+    topic_performance = Column(JSON, nullable=False)
+    results = Column(JSON, nullable=False)
+
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False
+    )

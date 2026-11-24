@@ -1,4 +1,5 @@
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Form
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -12,7 +13,7 @@ from app.resume import router as resume_router
 from app.jobs import router as jobs_router
 from app.assessment import router as assessment_router
 
-Base.metadata.create_all(bind=engine)
+
 
 # Create database tables if they do not exist.
 Base.metadata.create_all(bind=engine)
@@ -178,3 +179,32 @@ def get_student_dashboard(
     current_student: models.Student = Depends(get_current_student),
 ):
     return current_student
+
+@app.post("/token", response_model=schemas.TokenResponse)
+def login_for_swagger(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db),
+):
+    existing_student = (
+        db.query(models.Student)
+        .filter(models.Student.email == form_data.username)
+        .first()
+    )
+
+    if not existing_student or not verify_password(
+        form_data.password,
+        existing_student.password_hash,
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid email or password.",
+        )
+
+    access_token = create_access_token(
+        data={"sub": str(existing_student.id)}
+    )
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+    }

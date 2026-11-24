@@ -159,3 +159,12 @@ class AssessmentResponse(BaseModel):
     score_percentage: int
     topic_performance: dict[str, TopicPerformance]
     results: list[AssessmentResultItem]
+
+class AssessmentHistoryResponse(BaseModel):
+    id: int
+    total_questions: int
+    correct_answers: int
+    incorrect_answers: int
+    score_percentage: int
+    topic_performance: dict[str, TopicPerformance]
+    created_at: datetime

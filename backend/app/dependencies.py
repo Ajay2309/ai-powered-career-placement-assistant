@@ -8,7 +8,7 @@ from app.database import get_db
 from app import models
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
 
 def get_current_student(
