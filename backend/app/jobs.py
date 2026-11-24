@@ -5,6 +5,9 @@ from sqlalchemy.orm import Session
 from app import models, schemas
 from app.database import get_db
 
+from app.analysis import analyze_resume_text, calculate_job_match
+from app.dependencies import get_current_student
+
 
 router = APIRouter(prefix="/jobs", tags=["Jobs"])
 
@@ -36,6 +39,72 @@ def get_all_jobs(db: Session = Depends(get_db)):
         }
         for job in jobs
     ]
+
+
+@router.get(
+    "/recommendations/me",
+    response_model=list[schemas.JobMatchResponse],
+)
+def get_job_recommendations(
+    current_student: models.Student = Depends(get_current_student),
+    db: Session = Depends(get_db),
+):
+    # Find the student's latest uploaded resume
+    latest_resume = (
+        db.query(models.Resume)
+        .filter(models.Resume.student_id == current_student.id)
+        .order_by(models.Resume.uploaded_at.desc())
+        .first()
+    )
+
+    if latest_resume is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Please upload a resume before requesting job recommendations.",
+        )
+
+    # Extract skills from the resume
+    resume_analysis = analyze_resume_text(
+        latest_resume.extracted_text or ""
+    )
+    resume_skills = resume_analysis["skills"]
+
+    # Retrieve all active jobs
+    jobs = (
+        db.query(models.Job)
+        .filter(models.Job.is_active == True)
+        .all()
+    )
+
+    recommendations = []
+
+    for job in jobs:
+        required_skills = [
+            skill.strip()
+            for skill in job.required_skills.split(",")
+            if skill.strip()
+        ]
+
+        match_result = calculate_job_match(
+            resume_skills,
+            required_skills,
+        )
+
+        recommendations.append({
+            "job_id": job.id,
+            "title": job.title,
+            "company": job.company,
+            "location": job.location,
+            **match_result,
+        })
+
+    # Sort jobs from highest to lowest compatibility
+    recommendations.sort(
+        key=lambda item: item["match_percentage"],
+        reverse=True,
+    )
+
+    return recommendations
 
 
 @router.get("/{job_id}", response_model=schemas.JobResponse)

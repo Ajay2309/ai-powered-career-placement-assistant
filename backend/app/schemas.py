@@ -81,3 +81,13 @@ class JobResponse(BaseModel):
     employment_type: str | None
     is_active: bool
     created_at: datetime
+
+
+class JobMatchResponse(BaseModel):
+    job_id: int
+    title: str
+    company: str
+    location: str | None
+    match_percentage: int
+    matched_skills: list[str]
+    missing_skills: list[str]

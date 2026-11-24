@@ -90,3 +90,40 @@ def analyze_resume_text(text: str) -> dict:
         "word_count": word_count,
         "suggestions": suggestions,
     }
+
+
+def calculate_job_match(resume_skills: list[str], required_skills: list[str]) -> dict:
+    """Calculate compatibility between resume skills and job requirements."""
+
+    resume_skill_set = {
+        skill.strip().lower()
+        for skill in resume_skills
+        if skill.strip()
+    }
+
+    required_skill_set = {
+        skill.strip().lower()
+        for skill in required_skills
+        if skill.strip()
+    }
+
+    matched_skills = sorted(
+        resume_skill_set.intersection(required_skill_set)
+    )
+
+    missing_skills = sorted(
+        required_skill_set - resume_skill_set
+    )
+
+    if not required_skill_set:
+        match_percentage = 0
+    else:
+        match_percentage = round(
+            (len(matched_skills) / len(required_skill_set)) * 100
+        )
+
+    return {
+        "match_percentage": match_percentage,
+        "matched_skills": matched_skills,
+        "missing_skills": missing_skills,
+    }
