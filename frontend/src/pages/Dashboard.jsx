@@ -33,18 +33,29 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      <header className="bg-slate-900 text-white px-8 py-5 flex justify-between items-center">
-        <h1 className="text-xl font-bold">
-          Career & Placement Assistant
-        </h1>
+      
+<header className="bg-slate-900 text-white px-8 py-5 flex justify-between items-center">
+  <h1 className="text-xl font-bold">
+    Career & Placement Assistant
+  </h1>
 
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-lg"
-        >
-          Logout
-        </button>
-      </header>
+  <div className="flex gap-3">
+    <button
+      onClick={() => window.location.href = "/profile"}
+      className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-lg"
+    >
+      My Profile
+    </button>
+
+    <button
+      onClick={handleLogout}
+      className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-lg"
+    >
+      Logout
+    </button>
+  </div>
+</header>
+
 
       <main className="max-w-6xl mx-auto px-6 py-10">
         <h2 className="text-3xl font-bold text-slate-900 mb-2">
