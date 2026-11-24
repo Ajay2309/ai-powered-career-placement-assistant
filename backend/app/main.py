@@ -10,6 +10,7 @@ from app.security import hash_password, verify_password
 from app.dependencies import get_current_student
 from app.resume import router as resume_router
 from app.jobs import router as jobs_router
+from app.assessment import router as assessment_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -24,6 +25,7 @@ app = FastAPI(
 )
 app.include_router(resume_router)
 app.include_router(jobs_router)
+app.include_router(assessment_router)
 
 
 @app.get("/")

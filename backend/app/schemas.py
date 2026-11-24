@@ -119,3 +119,43 @@ class InterviewResponse(BaseModel):
     company: str
     technical_questions: list[InterviewQuestion]
     hr_questions: list[str]
+
+
+class AssessmentQuestion(BaseModel):
+    id: int
+    topic: str
+    question: str
+    options: list[str]
+
+
+class AssessmentAnswer(BaseModel):
+    question_id: int
+    selected_answer: str
+
+
+class AssessmentSubmit(BaseModel):
+    answers: list[AssessmentAnswer]
+
+
+class AssessmentResultItem(BaseModel):
+    question_id: int
+    topic: str
+    selected_answer: str
+    correct_answer: str
+    is_correct: bool
+    explanation: str
+
+
+class TopicPerformance(BaseModel):
+    total_questions: int
+    correct_answers: int
+    score_percentage: int
+
+
+class AssessmentResponse(BaseModel):
+    total_questions: int
+    correct_answers: int
+    incorrect_answers: int
+    score_percentage: int
+    topic_performance: dict[str, TopicPerformance]
+    results: list[AssessmentResultItem]
