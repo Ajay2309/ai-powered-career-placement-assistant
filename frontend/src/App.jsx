@@ -8,6 +8,7 @@ import {
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
+import Resume from "./pages/Resume";
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("access_token");
@@ -46,6 +47,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/resume"
+  element={
+    <ProtectedRoute>
+      <Resume />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </BrowserRouter>
   );
