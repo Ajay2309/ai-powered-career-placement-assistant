@@ -85,9 +85,24 @@ class JobResponse(BaseModel):
 
 class JobMatchResponse(BaseModel):
     job_id: int
-    title: str
+    title:  str
     company: str
     location: str | None
     match_percentage: int
     matched_skills: list[str]
     missing_skills: list[str]
+
+
+class SkillRecommendation(BaseModel):
+    skill: str
+    recommendation: str
+
+
+class SkillGapResponse(BaseModel):
+    job_id: int
+    job_title: str
+    company: str
+    match_percentage: int
+    matched_skills: list[str]
+    missing_skills: list[str]
+    learning_recommendations: list[SkillRecommendation]

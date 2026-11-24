@@ -127,3 +127,69 @@ def calculate_job_match(resume_skills: list[str], required_skills: list[str]) ->
         "matched_skills": matched_skills,
         "missing_skills": missing_skills,
     }
+
+
+def generate_skill_gap_analysis(
+    resume_skills: list[str],
+    required_skills: list[str],
+) -> dict:
+    """Identify missing job skills and suggest improvements."""
+
+    resume_skill_set = {
+        skill.strip().lower()
+        for skill in resume_skills
+        if skill.strip()
+    }
+
+    matched_skills = [
+        skill.strip()
+        for skill in required_skills
+        if skill.strip().lower() in resume_skill_set
+    ]
+
+    missing_skills = [
+        skill.strip()
+        for skill in required_skills
+        if skill.strip()
+        and skill.strip().lower() not in resume_skill_set
+    ]
+
+    learning_recommendations = {
+        "python": "Practice Python fundamentals, functions, OOP, and problem-solving.",
+        "fastapi": "Learn FastAPI, REST API development, routing, and database integration.",
+        "sql": "Practice SQL queries, joins, filtering, and database design.",
+        "git": "Learn Git commands, branching, commits, and GitHub workflows.",
+        "html": "Learn HTML structure, semantic elements, and forms.",
+        "css": "Practice CSS layouts, Flexbox, Grid, and responsive design.",
+        "javascript": "Study JavaScript fundamentals, ES6, and DOM manipulation.",
+        "react": "Learn React components, props, state, and hooks.",
+        "machine learning": "Study supervised learning, unsupervised learning, and model evaluation.",
+        "numpy": "Practice NumPy arrays, indexing, and numerical operations.",
+        "pandas": "Learn Pandas DataFrames, data cleaning, and data analysis.",
+    }
+
+    recommendations = [
+        {
+            "skill": skill,
+            "recommendation": learning_recommendations.get(
+                skill.lower(),
+                f"Study the fundamentals of {skill} and build a practical project using it.",
+            ),
+        }
+        for skill in missing_skills
+    ]
+
+    total_required = len(required_skills)
+
+    match_percentage = (
+        round((len(matched_skills) / total_required) * 100)
+        if total_required > 0
+        else 0
+    )
+
+    return {
+        "match_percentage": match_percentage,
+        "matched_skills": matched_skills,
+        "missing_skills": missing_skills,
+        "learning_recommendations": recommendations,
+    }

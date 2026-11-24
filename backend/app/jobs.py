@@ -5,7 +5,11 @@ from sqlalchemy.orm import Session
 from app import models, schemas
 from app.database import get_db
 
-from app.analysis import analyze_resume_text, calculate_job_match
+from app.analysis import (
+    analyze_resume_text,
+    calculate_job_match,
+    generate_skill_gap_analysis,
+)
 from app.dependencies import get_current_student
 
 
@@ -105,6 +109,70 @@ def get_job_recommendations(
     )
 
     return recommendations
+
+@router.get(
+    "/{job_id}/skill-gap",
+    response_model=schemas.SkillGapResponse,
+)
+def get_skill_gap_analysis(
+    job_id: int,
+    current_student: models.Student = Depends(get_current_student),
+    db: Session = Depends(get_db),
+):
+    # Get the student's latest uploaded resume.
+    latest_resume = (
+        db.query(models.Resume)
+        .filter(models.Resume.student_id == current_student.id)
+        .order_by(models.Resume.uploaded_at.desc())
+        .first()
+    )
+
+    if latest_resume is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Please upload a resume before requesting skill gap analysis.",
+        )
+
+    # Find the selected active job.
+    job = (
+        db.query(models.Job)
+        .filter(
+            models.Job.id == job_id,
+            models.Job.is_active.is_(True),
+        )
+        .first()
+    )
+
+    if job is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Job not found.",
+        )
+
+    # Extract skills from the resume.
+    resume_skills = analyze_resume_text(
+        latest_resume.extracted_text or ""
+    )["skills"]
+
+    # Extract required skills from the job.
+    required_skills = [
+        skill.strip()
+        for skill in job.required_skills.split(",")
+        if skill.strip()
+    ]
+
+    # Generate the skill gap report.
+    analysis = generate_skill_gap_analysis(
+        resume_skills,
+        required_skills,
+    )
+
+    return {
+        "job_id": job.id,
+        "job_title": job.title,
+        "company": job.company,
+        **analysis,
+    }
 
 
 @router.get("/{job_id}", response_model=schemas.JobResponse)
