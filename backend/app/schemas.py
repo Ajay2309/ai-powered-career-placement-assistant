@@ -106,3 +106,16 @@ class SkillGapResponse(BaseModel):
     matched_skills: list[str]
     missing_skills: list[str]
     learning_recommendations: list[SkillRecommendation]
+
+
+class InterviewQuestion(BaseModel):
+    skill: str
+    question: str
+
+
+class InterviewResponse(BaseModel):
+    job_id: int
+    job_title: str
+    company: str
+    technical_questions: list[InterviewQuestion]
+    hr_questions: list[str]
