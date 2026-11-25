@@ -19,8 +19,9 @@ function Dashboard() {
         },
         {
             title: "Interview Preparation",
-            description:
-                "Practice interview questions and improve your confidence.",
+            description: "Prepare for technical and HR interviews",
+            icon: "🎯",
+            path: "/interview",
         },
         {
             title: "Mock Assessments",

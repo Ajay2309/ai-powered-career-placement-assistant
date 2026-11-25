@@ -69,7 +69,7 @@ def generate_interview_questions(
     job_title: str,
     technical_question_limit: int = 10,
 ) -> dict:
-    """Generate interview questions based on resume skills and job requirements."""
+    """Generate technical and HR interview questions with answer guidance."""
 
     all_skills = list(dict.fromkeys(
         skill.strip()
@@ -94,7 +94,7 @@ def generate_interview_questions(
         if len(technical_questions) >= technical_question_limit:
             break
 
-    # Add general questions if fewer technical questions are available.
+    # Add general technical questions if needed.
     if len(technical_questions) < technical_question_limit:
         for skill in all_skills:
             questions = [
@@ -113,17 +113,44 @@ def generate_interview_questions(
             if len(technical_questions) >= technical_question_limit:
                 break
 
+    # Technical questions with suggested answers.
+    interview_questions = []
+
+    for skill, question in zip(selected_skills, technical_questions):
+        suggested_answer = (
+            f"To answer this question about {skill}, start by explaining "
+            f"the relevant concept clearly. Then describe how you have used "
+            f"{skill} in a project, assignment, or practical exercise. "
+            f"Explain the problem you faced, the approach you took, "
+            f"and the result. Finally, mention what you learned. "
+            f"Make sure your answer specifically addresses: {question}"
+        )
+
+        interview_questions.append({
+            "skill": skill,
+            "question": question,
+            "answer": suggested_answer,
+        })
+
+    # HR questions with suggested answer guidance.
+    hr_interview_questions = []
+
+    for question in HR_QUESTIONS:
+        hr_interview_questions.append({
+            "question": question,
+            "answer": (
+                "Answer honestly and confidently. Use a specific example "
+                "from your academic experience, projects, internships, "
+                "or personal learning where appropriate. Structure your "
+                "answer clearly, explain your reasoning, and connect "
+                "your response to the job role. Avoid memorizing "
+                "answers word-for-word."
+            ),
+        })
+
+    # Return interview preparation data.
     return {
         "job_title": job_title,
-        "technical_questions": [
-            {
-                "skill": skill,
-                "question": question,
-            }
-            for skill, question in zip(
-                selected_skills,
-                technical_questions,
-            )
-        ],
-        "hr_questions": HR_QUESTIONS,
+        "technical_questions": interview_questions,
+        "hr_questions": hr_interview_questions,
     }

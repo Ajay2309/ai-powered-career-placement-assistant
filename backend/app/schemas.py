@@ -111,6 +111,12 @@ class SkillGapResponse(BaseModel):
 class InterviewQuestion(BaseModel):
     skill: str
     question: str
+    answer: str
+
+
+class HRInterviewQuestion(BaseModel):
+    question: str
+    answer: str
 
 
 class InterviewResponse(BaseModel):
@@ -118,7 +124,7 @@ class InterviewResponse(BaseModel):
     job_title: str
     company: str
     technical_questions: list[InterviewQuestion]
-    hr_questions: list[str]
+    hr_questions: list[HRInterviewQuestion]
 
 
 class AssessmentQuestion(BaseModel):
