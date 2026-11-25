@@ -3,35 +3,33 @@ function Dashboard() {
     const features = [
         {
             title: "Resume Analysis",
-            description:
-                "Upload and analyze your resume to identify strengths and weaknesses.",
+            description: "Upload and analyze your resume to identify strengths and weaknesses.",
             path: "/resume",
         },
         {
             title: "Job Recommendations",
             description: "Discover jobs matching your skills and qualifications.",
-            path: "/jobs"
+            path: "/jobs",
         },
         {
             title: "Skill Gap Analysis",
             description: "Identify missing skills and improve your employability.",
-            path: "/skill-gap"
+            path: "/skill-gap",
         },
         {
             title: "Interview Preparation",
-            description: "Prepare for technical and HR interviews",
-            icon: "🎯",
+            description: "Prepare for technical and HR interviews.",
             path: "/interview",
         },
         {
             title: "Mock Assessments",
-            description:
-                "Test your technical knowledge through practice assessments.",
+            description: "Test your technical knowledge through practice assessments.",
+            path: "/assessment",
         },
         {
             title: "Assessment History",
-            description:
-                "Track your previous assessment scores and performance.",
+            description: "Track your previous assessment scores and performance.",
+            path: "/assessment-history",
         },
     ];
 
@@ -40,18 +38,8 @@ function Dashboard() {
         window.location.href = "/login";
     };
 
-    const handleExplore = (path) => {
-        if (path) {
-            window.location.href = path;
-        } else {
-            alert("This feature will be available soon!");
-        }
-    };
-
     return (
         <div className="min-h-screen bg-slate-100">
-
-            {/* Header */}
             <header className="bg-slate-900 text-white px-8 py-5 flex justify-between items-center">
                 <h1 className="text-xl font-bold">
                     Career & Placement Assistant
@@ -74,9 +62,7 @@ function Dashboard() {
                 </div>
             </header>
 
-            {/* Dashboard Content */}
             <main className="max-w-6xl mx-auto px-6 py-10">
-
                 <h2 className="text-3xl font-bold text-slate-900 mb-2">
                     Student Dashboard
                 </h2>
@@ -85,9 +71,7 @@ function Dashboard() {
                     Welcome! Manage your career preparation from one place.
                 </p>
 
-                {/* Feature Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
                     {features.map((feature) => (
                         <div
                             key={feature.title}
@@ -102,14 +86,13 @@ function Dashboard() {
                             </p>
 
                             <button
-                                onClick={() => handleExplore(feature.path)}
+                                onClick={() => window.location.href = feature.path}
                                 className="mt-5 text-blue-600 font-semibold hover:text-blue-800"
                             >
                                 Explore →
                             </button>
                         </div>
                     ))}
-
                 </div>
             </main>
         </div>
