@@ -12,6 +12,11 @@ function Dashboard() {
             path: "/jobs",
         },
         {
+            title: "Live Job Search",
+            description: "Explore real job openings from external companies and apply directly.",
+            path: "/live-jobs",
+        },
+        {
             title: "Skill Gap Analysis",
             description: "Identify missing skills and improve your employability.",
             path: "/skill-gap",

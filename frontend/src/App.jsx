@@ -15,6 +15,7 @@ import SkillGap from "./pages/SkillGap";
 import Interview from "./pages/Interview";
 import Assessment from "./pages/Assessment";
 import AssessmentHistory from "./pages/AssessmentHistory";
+import LiveJobs from "./pages/LiveJobs";
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("access_token");
@@ -42,6 +43,10 @@ function App() {
 
         <Route path="/jobs" element={
           <ProtectedRoute><Jobs /></ProtectedRoute>
+        } />
+
+        <Route path="/live-jobs" element={
+          <ProtectedRoute><LiveJobs /></ProtectedRoute>
         } />
 
         <Route path="/skill-gap" element={
