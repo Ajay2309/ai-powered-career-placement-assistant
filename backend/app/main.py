@@ -15,6 +15,7 @@ from app.resume import router as resume_router
 from app.jobs import router as jobs_router
 from app.assessment import router as assessment_router
 from app.live_jobs import router as live_jobs_router
+from app.application_tracker import router as application_tracker_router
 
 
 
@@ -40,6 +41,7 @@ app.include_router(resume_router)
 app.include_router(jobs_router)
 app.include_router(assessment_router)
 app.include_router(live_jobs_router)
+app.include_router(application_tracker_router)
 
 
 @app.get("/")

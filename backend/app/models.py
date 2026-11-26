@@ -1,7 +1,17 @@
 
 from datetime import datetime
 
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Text, JSON
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    JSON,
+)
+
 from app.database import Base
 
 
@@ -16,6 +26,7 @@ class Student(Base):
     graduation_year = Column(Integer, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
+
 class Resume(Base):
     __tablename__ = "resumes"
 
@@ -25,6 +36,7 @@ class Resume(Base):
     file_path = Column(String(500), nullable=False)
     extracted_text = Column(Text, nullable=True)
     uploaded_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
 
 class Job(Base):
     __tablename__ = "jobs"
@@ -38,6 +50,7 @@ class Job(Base):
     employment_type = Column(String(50), nullable=True)
     is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
 
 class AssessmentAttempt(Base):
     __tablename__ = "assessment_attempts"
@@ -61,5 +74,50 @@ class AssessmentAttempt(Base):
     created_at = Column(
         DateTime,
         default=datetime.utcnow,
+        nullable=False
+    )
+
+
+class JobApplication(Base):
+    __tablename__ = "job_applications"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    student_id = Column(
+        Integer,
+        ForeignKey("students.id"),
+        nullable=False,
+        index=True
+    )
+
+    job_title = Column(String(150), nullable=False)
+    company = Column(String(150), nullable=False)
+    location = Column(String(150), nullable=True)
+    job_url = Column(String(500), nullable=True)
+
+    status = Column(
+        String(50),
+        default="Applied",
+        nullable=False
+    )
+
+    applied_date = Column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False
+    )
+
+    notes = Column(Text, nullable=True)
+
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False
+    )
+
+    updated_at = Column(
+        DateTime,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow,
         nullable=False
     )
