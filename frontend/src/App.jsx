@@ -16,6 +16,7 @@ import Interview from "./pages/Interview";
 import Assessment from "./pages/Assessment";
 import AssessmentHistory from "./pages/AssessmentHistory";
 import LiveJobs from "./pages/LiveJobs";
+import Applications from "./pages/Applications";
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("access_token");
@@ -63,6 +64,9 @@ function App() {
 
         <Route path="/assessment-history" element={
           <ProtectedRoute><AssessmentHistory /></ProtectedRoute>
+        } />
+        <Route path="/applications" element={
+          <ProtectedRoute><Applications /></ProtectedRoute>
         } />
       </Routes>
     </BrowserRouter>
