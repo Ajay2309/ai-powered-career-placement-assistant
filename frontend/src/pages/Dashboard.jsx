@@ -17,6 +17,11 @@ function Dashboard() {
             path: "/live-jobs",
         },
         {
+            title: "Application Tracker",
+            description: "Track your applications, interviews, shortlists, and placement progress.",
+            path: "/applications",
+        },
+        {
             title: "Skill Gap Analysis",
             description: "Identify missing skills and improve your employability.",
             path: "/skill-gap",
