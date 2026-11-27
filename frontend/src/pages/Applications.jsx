@@ -517,5 +517,4 @@ function Applications() {
     </div>
   );
 }
-
 export default Applications;
