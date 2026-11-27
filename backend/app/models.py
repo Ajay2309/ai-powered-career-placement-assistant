@@ -121,3 +121,38 @@ class JobApplication(Base):
         onupdate=datetime.utcnow,
         nullable=False
     )
+class Notification(Base):
+    __tablename__ = "notifications"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    student_id = Column(
+        Integer,
+        ForeignKey("students.id"),
+        nullable=False,
+        index=True
+    )
+
+    title = Column(String(200), nullable=False)
+
+    message = Column(Text, nullable=False)
+
+    notification_type = Column(
+        String(50),
+        default="general",
+        nullable=False
+    )
+
+    is_read = Column(
+        Boolean,
+        default=False,
+        nullable=False
+    )
+
+    reminder_date = Column(DateTime, nullable=True)
+
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False
+    )

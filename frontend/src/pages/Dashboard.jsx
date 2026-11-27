@@ -123,6 +123,27 @@ function Dashboard() {
                     </button>
                 </div>
 
+                <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
+                    <div className="text-3xl mb-3">🔔</div>
+
+                    <h3 className="text-xl font-bold mb-2">
+                        Notifications & Reminders
+                    </h3>
+
+                    <p className="text-slate-600 mb-4">
+                        Manage interview reminders, application updates
+                        and placement preparation schedules.
+                    </p>
+
+                    <button
+                        onClick={() => window.location.href = "/notifications"}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    >
+                        Open Notifications →
+                    </button>
+                </div>
+
+
             </main>
         </div>
     );
